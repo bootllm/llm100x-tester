@@ -14,6 +14,9 @@ func GetDefinition() tester_definition.TesterDefinition {
 			marioMoreTestCase(),
 			cashTestCase(),
 			creditTestCase(),
+
+			// Week 2: Arrays
+			scrabbleTestCase(),
 			// TODO: 添加更多测试用例
 		},
 	}
