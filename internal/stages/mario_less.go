@@ -37,6 +37,7 @@ func testMarioLess(harness *test_case_harness.TestCaseHarness) error {
 	logger.Successf("mario.c compiles")
 
 	// 3. 测试拒绝无效输入 (对齐 CS50 check50)
+	// 使用交互模式: Start() -> SendLine() -> Reject()
 	rejectTests := []struct {
 		input string
 		name  string
@@ -50,15 +51,20 @@ func testMarioLess(harness *test_case_harness.TestCaseHarness) error {
 	for _, tc := range rejectTests {
 		logger.Infof("Testing %s...", tc.name)
 
+		// 使用交互模式: 启动程序 -> 发送输入 -> 检查拒绝（程序还在运行）
 		r := runner.Run(workDir, "mario").
 			WithTimeout(5 * time.Second).
-			Stdin(tc.input).
-			Reject()
+			WithPty().
+			Start().
+			SendLine(tc.input).
+			Reject(200 * time.Millisecond)
 
 		if err := r.Error(); err != nil {
+			r.Kill()
 			return fmt.Errorf("%s: %v", tc.name, err)
 		}
 
+		r.Kill()
 		logger.Successf("✓ %s", tc.name)
 	}
 

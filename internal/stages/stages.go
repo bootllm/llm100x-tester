@@ -17,7 +17,21 @@ func GetDefinition() tester_definition.TesterDefinition {
 
 			// Week 2: Arrays
 			scrabbleTestCase(),
-			// TODO: 添加更多测试用例
+			readabilityTestCase(),
+			caesarTestCase(),
+			substitutionTestCase(),
+
+			// Week 3: Algorithms
+			sortTestCase(),
+			pluralityTestCase(),
+			runoffTestCase(),
+			tidemanTestCase(),
+
+			// Week 4: Memory
+			volumeTestCase(),
+			filterLessTestCase(),
+			filterMoreTestCase(),
+			recoverTestCase(),
 		},
 	}
 }
