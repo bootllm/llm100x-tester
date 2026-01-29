@@ -6,8 +6,8 @@ BCS100X 课程自动化测试工具。
 
 ```bash
 # 克隆项目
-git clone https://github.com/bootcs-dev/bcs100x-tester
-git clone https://github.com/bootcs-dev/bootcs-tester-utils
+git clone https://github.com/bootcs-cn/bcs100x-tester
+git clone https://github.com/bootcs-cn/tester-utils
 
 # 编译
 cd bcs100x-tester
