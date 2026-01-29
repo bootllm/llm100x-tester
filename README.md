@@ -37,6 +37,22 @@ cd ~/my-solution/hello
 docker run --rm -v "$(pwd)/..:/workspace" bootcs/bcs100x-tester:local -s hello -d /workspace/hello
 ```
 
+**建议：** 创建包装脚本简化使用
+
+```bash
+# 在代码根目录创建 test.sh
+cat > test.sh << 'EOF'
+#!/bin/bash
+# 用法: ./test.sh hello
+STAGE=${1:-hello}
+docker run --rm -v "$(pwd):/workspace" bootcs/bcs100x-tester -s "$STAGE" -d "/workspace/$STAGE"
+EOF
+
+chmod +x test.sh
+./test.sh hello      # 测试 hello
+./test.sh caesar     # 测试 caesar
+```
+
 **说明：** `-v` 挂载代码目录到容器，需要可写权限用于编译。
 
 ## License
