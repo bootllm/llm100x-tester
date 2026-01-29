@@ -20,7 +20,7 @@ go build .
 ```bash
 cd ~/my-solution  # 你的代码根目录
 docker pull bootcs/bcs100x-tester
-docker run --rm -v "$(pwd):/workspace" bootcs/bcs100x-tester -s hello -d /workspace/hello
+docker run --rm --user $(id -u):$(id -g) -v "$(pwd):/workspace" bootcs/bcs100x-tester -s hello -d /workspace/hello
 ```
 
 **简化脚本（推荐）**
@@ -29,7 +29,7 @@ docker run --rm -v "$(pwd):/workspace" bootcs/bcs100x-tester -s hello -d /worksp
 
 ```bash
 #!/bin/bash
-docker run --rm -v "$(pwd):/workspace" bootcs/bcs100x-tester \
+docker run --rm --user $(id -u):$(id -g) -v "$(pwd):/workspace" bootcs/bcs100x-tester \
   -s "${1:-hello}" -d "/workspace/${1:-hello}"
 ```
 
@@ -41,7 +41,7 @@ docker run --rm -v "$(pwd):/workspace" bootcs/bcs100x-tester \
 git clone https://github.com/bootcs-cn/bcs100x-tester
 cd bcs100x-tester
 docker build -t my-tester .
-# 使用: docker run --rm -v ~/my-solution:/workspace my-tester -s hello -d /workspace/hello
+# 使用: docker run --rm --user $(id -u):$(id -g) -v ~/my-solution:/workspace my-tester -s hello -d /workspace/hello
 ```
 
 ## License
