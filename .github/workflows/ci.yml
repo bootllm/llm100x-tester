@@ -105,3 +105,12 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Trigger solution tests
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          curl -X POST \
+            -H "Authorization: token ${{ secrets.SOLUTION_REPO_PAT }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/bootcs-cn/bcs100x-solution/dispatches \
+            -d '{"event_type":"tester-updated"}'
