@@ -20,7 +20,7 @@ env:
   ACR_IMAGE_NAME: bcs100x-tester
 
 jobs:
-  test:
+  unit-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -45,13 +45,9 @@ jobs:
       - name: Verify binary
         run: ./bcs100x-tester --help
 
-  build-and-push:
-    needs: test
+  regression-test:
+    needs: unit-test
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -62,39 +58,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Log in to Docker Hub
-        if: github.event_name != 'pull_request'
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: bootcs
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Log in to Aliyun ACR
-        if: github.event_name != 'pull_request'
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.ACR_REGISTRY }}
-          username: ${{ env.ACR_NAMESPACE }}
-          password: ${{ secrets.ACR_PASSWORD }}
-
-      - name: Extract metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-            ${{ env.ACR_REGISTRY }}/${{ env.ACR_NAMESPACE }}/${{ env.ACR_IMAGE_NAME }}
-          tags: |
-            type=ref,event=branch
-            type=ref,event=pr
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
-            type=raw,value=latest,enable={{is_default_branch}}
-            type=sha,prefix={{branch}}-
-
-      - name: Build and push Docker image
+      - name: Build test image
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -107,7 +71,6 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Checkout solution repository
-        if: github.event_name != 'pull_request'
         uses: actions/checkout@v4
         with:
           repository: bootcs-cn/bcs100x-solution
@@ -115,7 +78,6 @@ jobs:
           path: solution
 
       - name: Run regression tests
-        if: github.event_name != 'pull_request'
         run: |
           cd solution
           STAGES=(
@@ -149,8 +111,55 @@ jobs:
           echo ""
           echo "All ${#STAGES[@]} tests passed!"
 
+  release:
+    needs: regression-test
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: bootcs
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Log in to Aliyun ACR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.ACR_REGISTRY }}
+          username: ${{ env.ACR_NAMESPACE }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+            ${{ env.ACR_REGISTRY }}/${{ env.ACR_NAMESPACE }}/${{ env.ACR_IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=sha,prefix={{branch}}-
+
       - name: Build and push multi-platform image
-        if: github.event_name != 'pull_request'
         uses: docker/build-push-action@v5
         with:
           context: .
