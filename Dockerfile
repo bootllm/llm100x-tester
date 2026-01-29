@@ -47,6 +47,11 @@ RUN apt-get update && apt-get install -y \
     libsqlite3-dev \
     && rm -rf /var/lib/apt/lists/*
 
+# Install Python packages globally for all stages
+RUN pip3 install --no-cache-dir --break-system-packages \
+    flask \
+    cs50
+
 # Create a non-root user for running tests
 RUN useradd -m -s /bin/bash tester
 
