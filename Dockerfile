@@ -3,7 +3,7 @@
 # This Dockerfile builds bcs100x-tester using the published tester-utils from GitHub
 # Build from the bootcs-courses directory:
 #   cd /path/to/bootcs-courses
-#   docker build -f bcs100x-tester/Dockerfile.multi-context -t bootcs/bcs100x-tester .
+#   docker build -f bcs100x-tester/Dockerfile -t bootcs/bcs100x-tester .
 
 # Stage 1: Build the Go binary
 FROM golang:1.24-bookworm AS builder
