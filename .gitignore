@@ -1,5 +1,6 @@
 # Binaries
 bcs100x-tester
+tester
 *.exe
 *.exe~
 *.dll
