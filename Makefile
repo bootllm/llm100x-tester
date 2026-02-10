@@ -2,7 +2,7 @@
 
 # 构建 tester
 build:
-	go build -o bcs100x-tester .
+	go build -o llm100x-tester .
 
 # 安装到 $GOPATH/bin (可全局使用)
 install:
@@ -10,7 +10,7 @@ install:
 
 # 卸载
 uninstall:
-	rm -f $(shell go env GOPATH)/bin/bcs100x-tester
+	rm -f $(shell go env GOPATH)/bin/llm100x-tester
 
 # 运行测试
 test:
@@ -18,7 +18,7 @@ test:
 
 # 清理构建产物
 clean:
-	rm -f bcs100x-tester
+	rm -f llm100x-tester
 	go clean
 
 # 运行 tester (需要指定工作目录)

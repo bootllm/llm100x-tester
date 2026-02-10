@@ -6,11 +6,11 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TESTER_DIR="$(dirname "$SCRIPT_DIR")"
-SOLUTION_DIR="${TESTER_DIR}/../bcs100x-solution"
+SOLUTION_DIR="${TESTER_DIR}/../llm100x-solution"
 
 # 构建 tester
 cd "$TESTER_DIR"
-go build -o bcs100x-tester .
+go build -o llm100x-tester .
 
 # Stage 列表（按课程顺序）
 STAGES=(
@@ -52,7 +52,7 @@ SKIPPED=0
 TOTAL_TIME=0
 
 echo "=========================================="
-echo "  BCS100X Solution Tester"
+echo "  LLM100X Solution Tester"
 echo "=========================================="
 echo ""
 
@@ -69,7 +69,7 @@ for stage in "${STAGES[@]}"; do
     
     start_time=$(python3 -c 'import time; print(time.time())')
     
-    if ./bcs100x-tester -d="$stage_dir" -s="$stage" > /dev/null 2>&1; then
+    if ./llm100x-tester -d="$stage_dir" -s="$stage" > /dev/null 2>&1; then
         end_time=$(python3 -c 'import time; print(time.time())')
         elapsed=$(python3 -c "print(f'{$end_time - $start_time:.2f}')")
         echo "✅ PASSED (${elapsed}s)"

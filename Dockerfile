@@ -1,8 +1,8 @@
 # Docker Build Context Setup
 #
-# This Dockerfile builds bcs100x-tester using the published tester-utils from GitHub
-# Build from the bcs100x-tester directory:
-#   cd bcs100x-tester
+# This Dockerfile builds llm100x-tester using the published tester-utils from GitHub
+# Build from the llm100x-tester directory:
+#   cd llm100x-tester
 #   docker build -t bootcs/bcs100x-tester .
 
 # Stage 1: Build the Go binary

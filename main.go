@@ -3,8 +3,8 @@ package main
 import (
 	"os"
 
-	"github.com/bootcs-cn/bcs100x-tester/internal/stages"
-	tester_utils "github.com/bootcs-cn/tester-utils"
+	"github.com/bootllm/llm100x-tester/internal/stages"
+	tester_utils "github.com/bootllm/tester-utils"
 )
 
 func main() {

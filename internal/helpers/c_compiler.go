@@ -9,8 +9,8 @@ import (
 // workDir: 工作目录
 // source: 源文件名 (如 "hello.c")
 // output: 输出文件名 (如 "hello")
-// needBootcs: 是否需要 bootcs.h (使用 -I.. 引入父目录)
-func CompileC(workDir, source, output string, needBootcs bool) error {
+// needBootllm: 是否需要 bootllm.h (使用 -I.. 引入父目录)
+func CompileC(workDir, source, output string, needBootllm bool) error {
 	args := []string{
 		"-o", output,
 		source,
@@ -19,8 +19,8 @@ func CompileC(workDir, source, output string, needBootcs bool) error {
 		"-Werror",
 	}
 
-	// 如果需要 bootcs.h，添加 -I.. 使其能找到父目录的 bootcs.h
-	if needBootcs {
+	// 如果需要 bootllm.h，添加 -I.. 使其能找到父目录的 bootllm.h
+	if needBootllm {
 		args = append(args, "-I..")
 	}
 

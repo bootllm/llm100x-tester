@@ -14,10 +14,10 @@ on:
 
 env:
   REGISTRY: docker.io
-  IMAGE_NAME: bootcs/bcs100x-tester
+  IMAGE_NAME: bootllm/llm100x-tester
   ACR_REGISTRY: crpi-yc2n4986vyblcoxe.cn-shanghai.personal.cr.aliyuncs.com
-  ACR_NAMESPACE: bootcs
-  ACR_IMAGE_NAME: bcs100x-tester
+  ACR_NAMESPACE: bootllm
+  ACR_IMAGE_NAME: llm100x-tester
 
 jobs:
   unit-test:
@@ -43,7 +43,7 @@ jobs:
         run: go test -v ./...
 
       - name: Verify binary
-        run: ./bcs100x-tester --help
+        run: ./llm100x-tester --help
 
   regression-test:
     needs: unit-test
@@ -66,14 +66,14 @@ jobs:
           platforms: linux/amd64
           push: false
           load: true
-          tags: bootcs/bcs100x-tester:test
+          tags: bootcs/llm100x-tester:test
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Checkout solution repository
         uses: actions/checkout@v4
         with:
-          repository: bootcs-cn/bcs100x-solution
+          repository: bootllm/llm100x-solution
           token: ${{ secrets.SOLUTION_REPO_PAT }}
           path: solution
 
@@ -93,7 +93,7 @@ jobs:
           FAILED=()
           for stage in "${STAGES[@]}"; do
             echo "Testing $stage..."
-            if docker run --rm --user $(id -u):$(id -g) -v "$(pwd):/workspace" bootcs/bcs100x-tester:test \
+            if docker run --rm --user $(id -u):$(id -g) -v "$(pwd):/workspace" bootcs/llm100x-tester:test \
               -s "$stage" -d "/workspace/$stage"; then
               echo "✓ $stage passed"
             else
@@ -133,7 +133,7 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
-          username: bootcs
+          username: bootllm
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Log in to Aliyun ACR

@@ -4,7 +4,7 @@
 .gitattributes
 
 # Build artifacts
-bcs100x-tester
+llm100x-tester
 *.test
 *.out
 *.exe

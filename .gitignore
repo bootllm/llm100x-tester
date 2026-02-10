@@ -1,5 +1,5 @@
 # Binaries
-bcs100x-tester
+llm100x-tester
 tester
 *.exe
 *.exe~
