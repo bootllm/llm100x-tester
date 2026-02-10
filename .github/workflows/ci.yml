@@ -71,6 +71,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: bootllm/llm100x-solution
+          token: ${{ secrets.SOLUTION_REPO_PAT }}
           path: solution
 
       - name: Run regression tests
